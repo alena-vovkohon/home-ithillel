@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.head__table{
+  margin: 20px;  
+}
+@media all and (max-width: 450px) {
+    .head__table{
+    margin: 10px;  
+    }
+}
+table.table{
+    font-size: 18px;
+    width: 100%; 
+    border: 1px solid rgb(8, 129, 234);
+    border-spacing: 7px 5px; 
+}
+@media all and (max-width: 450px) {
+    table.table{
+        font-size: 10px;
+    }
+}
+td{
+    background: rgb(217, 185, 239); 
+    border: 1px solid #333;
+    padding: 5px;
+}
