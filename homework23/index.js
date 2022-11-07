@@ -10,7 +10,7 @@ let calcNumber = document.querySelector('.text-calc')
 let tasks = []
 let todoItemElems = []
 
-function Task(taskDescription, taskChecke, taskEdit) {
+function Task(taskDescription) {
   this.taskDescription = taskDescription
   this.taskChecke = false
   this.taskEdit = false
