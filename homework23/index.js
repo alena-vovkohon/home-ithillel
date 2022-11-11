@@ -5,190 +5,207 @@ let buttonClearn = document.querySelector('.clearn')
 let informationDiv = document.querySelector('.information')
 let background = document.querySelector('img')
 let ulListinfo = document.querySelector('.listinfo__list')
-let buttonSave = document.querySelector('.save')
-  
+let calcNumber = document.querySelector('.text-calc')
 
-inputCreate.addEventListener('focus', () => {
-  informationDiv.classList.add('active')
-  })
-
-inputCreate.addEventListener('blur', () => {
-    informationDiv.classList.remove('active')
-})
-
-/////Завдання ToDoList
 let tasks = []
 let todoItemElems = []
-let inputItemElems =[]
-let textItemElems = []
 
 function Task(taskDescription) {
   this.taskDescription = taskDescription
+  this.taskChecke = false
+  this.taskEdit = false
 }
 
-const createList = (task, index) => {
+const createListText = (task, index) => {
+
   let li = document.createElement('li')
   li.classList.add('listinfo__task')
   li.setAttribute('id', index)
 
-  let divBlock = document.createElement('div')
-  divBlock.classList.add('listinfo__block')
+  let inputCheckbox = document.createElement('input')
+  inputCheckbox.classList.add('listinfo__checkbox')
+  inputCheckbox.setAttribute('type', 'checkbox')
+  inputCheckbox.setAttribute('id', index)
+  let label = document.createElement('label')
+  label.classList.add('listinfo__item')
+  label.setAttribute('for', index)
+
   let p = document.createElement('p')
   p.classList.add('listinfo__text', 'text-task')
   p.setAttribute('id', index)
-  let input = document.createElement('input')
-  input.classList.add('head__input', 'task-edite')
-  input.setAttribute('id', index)
 
   let divEdit = document.createElement('div')
   divEdit.classList.add('button-block')
-  let divRemove = document.createElement('div')
-  divRemove.classList.add('head__add')
-  let buttonEdite = document.createElement('button')
-  buttonEdite.classList.add('head__button', 'edit')
-  buttonEdite.setAttribute('type', 'button')
+
+  let buttonEdit = document.createElement('button')
+  buttonEdit.classList.add('head__button', 'edit')
+  buttonEdit.setAttribute('type', 'button')
   let buttonRemove = document.createElement('button')
   buttonRemove.classList.add('head__button', 'remove')
   buttonRemove.setAttribute('type', 'button')
 
   ulListinfo.appendChild(li)
-  li.appendChild(divBlock)
-  divBlock.appendChild(p)
+  li.appendChild(inputCheckbox)
+  li.appendChild(label)
+  label.appendChild(p)
   p.innerHTML = task.taskDescription
-  console.log('inputCreate', inputCreate.value)
-  divBlock.appendChild(input)
 
   li.appendChild(divEdit)
-  divEdit.appendChild(buttonEdite)
-  buttonEdite.innerHTML = 'Edit'
-
-  li.appendChild(divRemove)
-  divRemove.appendChild(buttonRemove)
+  divEdit.append(buttonEdit,buttonRemove)
+  buttonEdit.innerHTML = 'Edit'
   buttonRemove.innerHTML = 'Remove'
-  
-  let inputTaskEdite = document.querySelector('.task-edite')
-  let textTaskEdite = document.querySelector('.text-task')
-  
-buttonEdite.addEventListener('click', () => {
-editeTask(index)
-  })
 
-// buttonSave.addEventListener('click', () => {
-//    saveInput(index)
-//   })
+  if (task.taskChecke === true) {
+    inputCheckbox.checked = true 
+    p.classList.add('checked')
+  }
+
+  buttonEdit.addEventListener('click', () => {
+    editTask(index)
+    console.log('createListText',tasks)
+  })
  
+  inputCheckbox.addEventListener('click', function () {
+    chackedTask(index)
+  })
   
   buttonRemove.addEventListener('click', () => {
-    // ulListinfo.removeChild(li)
     deleteTask(index)
   })
-  
+  return li
 }
 
- 
+const createListEdit = (task, index) => {
+  let li = document.createElement('li')
+  li.classList.add('listinfo__task', 'edit')
+  li.setAttribute('id', index)
+
+  let input = document.createElement('input')
+  input.classList.add('head__input', 'task-edit')
+  input.setAttribute('id', index)
+
+  let divEdit = document.createElement('div')
+  divEdit.classList.add('button-block')
+
+  let buttonSave = document.createElement('button')
+  buttonSave.classList.add('head__button', 'save')
+  buttonSave.setAttribute('type', 'button')
+  let buttonCancel= document.createElement('button')
+  buttonCancel.classList.add('head__button', 'cancel')
+  buttonCancel.setAttribute('type', 'button')
+
+  ulListinfo.appendChild(li)
+  li.appendChild(input)
+  input.value = task.taskDescription
+  
+  li.appendChild(divEdit)
+  buttonSave.innerHTML = 'Save'
+  buttonCancel.innerHTML = 'Cancel'
+  divEdit.append(buttonSave,buttonCancel)
+
+  buttonSave.addEventListener('click', () => {
+    saveEdit(index)
+  })
+
+   buttonCancel.addEventListener('click', () => {
+      canselEdit(index)
+   })
+  return li
+}
+
+const calkTasks = () => {
+  let calk = tasks.length
+  if (calk !== 0) {
+    calcNumber.innerHTML = `${calk} task(s)`
+  } else {
+    calcNumber.innerHTML = '0 tasks'
+  }
+}
+calkTasks()
 
 const inputClean = () => {
   inputCreate.value = ''
 }
 
+const ulListClean = () => {
+   ulListinfo.innerHTML = ''
+}
+
 const fillHtmlList = (arr) => {
-  ulListinfo.innerHTML = ''
-  if (arr.length !== 0) {
+  ulListClean()
+  if (arr.length !== 0) { 
     arr.forEach((item, index) => {
-      createList(item, index)
+        if (item.taskEdit){
+          let li = createListEdit(item, index)
+          item.taskChecke = false
+          ulListinfo.appendChild(li)
+        } else {
+            let li = createListText(item, index)
+            ulListinfo.appendChild(li)
+        }
     })
     todoItemElems = document.querySelectorAll('.listinfo__task')
-    inputItemElems = document.querySelectorAll('.task-edite')
-    textItemElems = document.querySelectorAll('.text-task')
   }
 }
 fillHtmlList(tasks)
 
 const deleteTask = (index) => {
   ulListinfo.removeChild(todoItemElems[index])
-  // todoItemElems[index].classList.add('delete')
-  setTimeout(() => {
-    tasks.splice(index, 1)
-    fillHtmlList(tasks)
-  }, 500)
+  tasks.splice(index, 1)
+
+  fillHtmlList(tasks)
+  calkTasks()
 }
 
-const editeTask = (index) => {
-  // console.log(inputItemElems[index])
-  // console.log(textItemElems[index])
-    inputItemElems[index].style.display = "block";
-    inputItemElems[index].value = textItemElems[index].innerHTML;
-    textItemElems[index].style.visibility = "hidden";
-  textItemElems[index].style.display = "none";
-  
-
-  console.log(ulListinfo.children[index])
-
-  let buttonEdite=ulListinfo.children[index].querySelector('.edit')
-  buttonEdite.classList.remove('edit')
-  buttonEdite.classList.add('sive')
-  console.log(buttonEdite)
-  buttonEdite.innerHTML = 'Save'
-
-  let buttonRemove=ulListinfo.children[index].querySelector('.remove')
-  buttonRemove.classList.remove('remove')
-  buttonRemove.classList.add('cancel')
-  console.log(buttonRemove)
-  buttonRemove.innerHTML = 'Cancel'
-  
-
+const chackedTask = (index) => {
+  tasks[index].taskChecke = !tasks[index].taskChecke
+  let textItemElement = todoItemElems[index].getElementsByTagName('p')
+  if (tasks[index].taskChecke) {
+    textItemElement[0].classList.add('checked')
+  } else {
+    textItemElement[0].classList.remove('checked')
+  }
 }
 
-const saveInput = (index) => {
-    console.log('click')
-  // console.log('focus',inputItemElems[index])
-  inputItemElems[index].style.display = "none";
-  textItemElems[index].style.visibility = "visible";
-  textItemElems[index].innerHTML = inputItemElems[index].value;
-  textItemElems[index].style.display = "flex";
-   let buttonEdite=ulListinfo.children[index].querySelector('.sive')
-  buttonEdite.classList.remove('seve')
-  buttonEdite.classList.add('edit')
-  console.log(buttonEdite)
-  buttonEdite.innerHTML = 'Edit'
+const editTask = (index) => {
+  tasks[index].taskEdit = !tasks[index].taskEdit
+  let newChild = createListEdit(tasks[index], index)
+  let oldChild = todoItemElems[index]
+  ulListinfo.replaceChild(newChild, oldChild)
 
-  let buttonRemove=ulListinfo.children[index].querySelector('.cancel')
-  buttonRemove.classList.remove('cancel')
-  buttonRemove.classList.add('remove')
-  console.log(buttonRemove)
-  buttonRemove.innerHTML = 'Remove'
- 
+  fillHtmlList(tasks)
+}
+
+const saveEdit = (index) => {
+  tasks[index].taskEdit = !tasks[index].taskEdit
+  console.log( tasks[index].taskChecke)
+  let textItemElement = todoItemElems[index].getElementsByTagName('input')
+  tasks[index].taskDescription = textItemElement[0].value
+  
+  fillHtmlList(tasks)
+}
+
+const canselEdit = (index) => {
+  tasks[index].taskEdit = !tasks[index].taskEdit
+  fillHtmlList(tasks)
 }
 
 
 buttonAdd.addEventListener('click', () => {
   if (inputCreate.value) {
     let valueInput = inputCreate.value;
-     tasks.push(new Task(valueInput))
-    // taskAllLocalStorage()
-    fillHtmlList(tasks)
-    // filterTasks()
-    // inputClean(createInput, checkboxCreate)
-
-    // tasks.push(inputCreate.value)
-    console.log('tasks', tasks)
-    // createList()
-    inputClean()
-  }
+    tasks.push(new Task(valueInput,))
   
+    fillHtmlList(tasks)
+    inputClean()
+    calkTasks()
+  }
+
 })
 
 buttonClearn.addEventListener('click', () => {
   inputClean()
+  ulListClean()
+  tasks=[]
+  calkTasks()
 })
-
-// const calkTasks = () => {
-//   activeTasks = tasks.length && tasks.filter((item) => item.completed == false)
-//   let calk = activeTasks.length
-//   if (calk !== 0) {
-//     calkNumber.innerHTML = calk
-//   } else {
-//     calkNumber.innerHTML = '0'
-//   }
-// }
-// calkTasks()
