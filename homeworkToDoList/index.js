@@ -20,6 +20,18 @@ div.classList.add('info')
 container.appendChild(div)      
 
 let tasks = []
+// localStorage.clear()
+
+if (localStorage.getItem('tasks') !== null) {
+    tasks = JSON.parse(localStorage.getItem('tasks'))
+    console.log(tasks)
+    renderingList() 
+}
+
+const taskAllLocalStorage = () => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+    console.log(localStorage)
+}
 
 function createHtmlItem() {
     div.innerHTML = ''
@@ -37,6 +49,7 @@ function createHtmlItem() {
         infoText()
         clearnInput()
     }
+    taskAllLocalStorage()
 }   
 
 function validInput(value) {
@@ -127,6 +140,7 @@ function siveEditeble(e) {
     itemLi.chacked = false
 
     renderingList()
+    taskAllLocalStorage()
 }
 
 function remuveHandlerItem(e) {
@@ -134,6 +148,7 @@ function remuveHandlerItem(e) {
     let index = tasks.findIndex(item => item.id.toString() === id)
     tasks.splice(index, 1)
     renderingList()
+    taskAllLocalStorage()
 }
 
 function editeHandlerItem(e) {
@@ -145,6 +160,7 @@ function editeHandlerItem(e) {
     let oldChild = e.target.parentElement
 
     e.target.parentElement.parentElement.replaceChild(newChild, oldChild)
+    taskAllLocalStorage()
 }
 
 function cancelEditeble(e) {
@@ -164,6 +180,7 @@ function checkedTasks(e) {
     } else {
         e.target.nextSibling.classList.remove('checked')
     }
+    taskAllLocalStorage()
 }
 
 function infoText() { 
@@ -181,5 +198,6 @@ buttonClearnAll.addEventListener('click', () => {
     clearnInput()
     div.innerHTML = ''
     ul.innerHTML = ''
-    tasks=[]
+    tasks = []
+    taskAllLocalStorage()
 })
