@@ -28,45 +28,49 @@ container.appendChild(divError)
 let url = ''
 
 buttonAdd.addEventListener('click', getWeather)
-buttonClearn.addEventListener('click', () => {
-    clearnInput()
-})
+buttonClearn.addEventListener('click', () => clearnInput())
 
-function getWeather() {
+function checkingValidation () {
     boxWeather.innerHTML = ''
     boxInfo.innerHTML = ''
     day()
-   
-    if (input.value === '') {
-        if (localStorage.getItem('city') !== null) {
-            city = localStorage.getItem('city')
-            url = `http://api.openweathermap.org/data/2.5/weather?q=` + `${city}` + `&units=metric&APPID=5d066958a60d315387d9492393935c19`
-        } else {
-            localStorage.setItem('city', 'TORONTO')
-            city = localStorage.getItem('city')
-            url = `http://api.openweathermap.org/data/2.5/weather?q=` + `${city}` + `&units=metric&APPID=5d066958a60d315387d9492393935c19` 
-        }
+
+    if (localStorage.getItem('city') !== null) {
+        let city = localStorage.getItem('city')
+        url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=5d066958a60d315387d9492393935c19`
     } else {
-        if (!validInput(input.value)) {
-        infoText("use only standard alphanumerics")
-            
-        } else {
-            divError.innerHTML=''
+        localStorage.setItem('city', 'TORONTO')
+        let city = localStorage.getItem('city')
+        url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=5d066958a60d315387d9492393935c19` 
+    }
+    
+    if (input.value) {
+            divError.innerHTML = ''
             divError.style.display = 'none'
             let city = input.value.toUpperCase()
-            url = `http://api.openweathermap.org/data/2.5/weather?q=` + `${city}` + `&units=metric&APPID=5d066958a60d315387d9492393935c19` 
+            url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=5d066958a60d315387d9492393935c19` 
             
             localStorage.setItem('city', input.value.toUpperCase())
-        }
-
-     }
+    }
     clearnInput()
+    return url
+}
 
+function getWeather() {
+    checkingValidation()
     fetch(url)
         .then(response => response.json())
-        .then(json => {
-        
-            let divTemp = document.createElement('div');
+        .then(json => createList(json))
+        .catch(error => {
+            console.log(error)
+            divError.innerHTML = ""
+            infoText("Сity not found.")
+        })
+}
+getWeather()
+
+function createList(json) {
+       let divTemp = document.createElement('div');
             divTemp.classList.add('box-temp');
             boxWeather.appendChild(divTemp);
 
@@ -74,8 +78,7 @@ function getWeather() {
             let h1 = document.createElement('h1');
             h1.classList.add('city');
             h1.innerHTML = json.name;
-            // boxWeather.appendChild(h1);
-            // console.log('h1', json.name)
+            // console.log(json.name)
             
             // Weather
             let h2 = document.createElement('h2');
@@ -106,7 +109,7 @@ function getWeather() {
             divIcon.classList.add('box__icon');
             boxWeather.appendChild(divIcon);
             divIcon.appendChild(iconImg);
-            let newIconImg = `http://openweathermap.org/img/w/` + `${icon}` + `.png`;
+            let newIconImg = `http://openweathermap.org/img/w/${icon}.png`;
             iconImg.setAttribute('src', newIconImg);
 
             //wind
@@ -119,37 +122,23 @@ function getWeather() {
 
             let pWind = document.createElement('p');
             pWind.classList.add('wind');
-            pWind.innerHTML = 'Wind: ' + windSpeed + ' km/h ' + windDeg;
+            pWind.innerHTML = `Wind: ${windSpeed} km/h ${windDeg} `;
             
             //Humidity
             let humidity = json.main.humidity;
             // console.log(humidity);
             let pHumidity = document.createElement('p');
             pHumidity.classList.add('humidity');
-            pHumidity.innerHTML = 'Humidity: ' + humidity + ' % ';
+            pHumidity.innerHTML = `Humidity: ${humidity} % `;
 
             //Pressure
             let pressure = json.main.pressure;
             // console.log(pressure);
             let pPressure = document.createElement('p');
             pPressure.classList.add('humidity');
-            pPressure.innerHTML = 'Pressure: ' + pressure + ' hPa ';
+            pPressure.innerHTML = `Pressure: ${pressure} hPa `;
 
             divInformation.append(pWind, pHumidity, pPressure);
-        })
-        .catch(error => {
-            divError.innerHTML=""
-            infoText("Сity not found.")
-        })
-}
-getWeather()
-
-function validInput(value) {
-    if (value == ''){
-        return true
-    } else {
-      return /^[a-zA-Z]+$/.test(value)  
-    }
 }
 
 function clearnInput() {
