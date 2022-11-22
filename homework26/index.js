@@ -9,7 +9,12 @@ buttonAdd.innerText = 'Add'
 let buttonClearnAll = document.createElement('button')
 buttonClearnAll.classList.add('clearn-button')
 buttonClearnAll.innerHTML='Clearn All'
-container.append(buttonAdd,buttonClearnAll)
+container.append(buttonAdd, buttonClearnAll)
+
+let inputSearch = document.createElement('input')    
+inputSearch.classList.add('search-input')
+inputSearch.setAttribute('placeholder', 'search')
+container.appendChild(inputSearch) 
 
 let ul = document.createElement('ul')
 ul.classList.add('list')
@@ -151,17 +156,24 @@ async function siveEditeble(e) {
 
     // renderingList()
     // taskAllLocalStorage()
+    inputSearch.value = ''
 }
 
-function remuveHandlerItem(e) {
+async function remuveHandlerItem(e) {
     let id = e.target.parentElement.id
     let index = tasks.findIndex(item => item.id.toString() === id)
-    tasks.splice(index, 1)
+    // console.log(index)
 
-    deleteToDoTask(tasks[index])
-    
+    let result = await deleteToDoTask(tasks[index])
+    console.log(result)
+    // if (!result) {
+    //     return
+    // }
+
+    tasks.splice(index, 1)
+    console.log(tasks)
     renderingList()
-    taskAllLocalStorage()
+    // taskAllLocalStorage()
 }
 
 function editeHandlerItem(e) {
@@ -223,6 +235,37 @@ buttonClearnAll.addEventListener('click', () => {
     taskAllLocalStorage()
 })
 
+inputSearch.addEventListener('input', filterText)
+
+ let pNothing = document.createElement('p')
+    pNothing.classList.add('nothing') 
+    container.appendChild(pNothing)
+
+function filterText(e) {
+    pNothing.innerHTML = ""
+     ul.innerHTML = ''
+    let value = e.target.value
+    let resaltFilter = tasks.filter(item => item.text.toLowerCase().includes(value.toLowerCase()))
+    console.log('resaltFilter', resaltFilter)
+
+    if (resaltFilter.length > 0) {
+       resaltFilter.forEach((item) => { 
+        if (item.editetaple){
+            let li = createLiEdite(item)
+            ul.appendChild(li)
+        } else {
+            let li = createLi(item)
+            ul.appendChild(li)
+        }
+    })
+    } else {
+        pNothing.innerHTML = "Not item found"
+   }
+
+
+}
+
+
 function cookedTask(item) {
      return {
                 text: item.title,
@@ -276,7 +319,7 @@ function deleteToDoTask(id) {
     // console.log(id)
     fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         method: 'DELETE',
-    })   
+    })
 }
 
 function createTask(text) {
@@ -299,7 +342,10 @@ function createTask(text) {
                 return task
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log(response.json())
+            response.json()
+        })
         .catch(error => {
             console.log(error.message)
             divError.innerHTML = ""
