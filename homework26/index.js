@@ -16,6 +16,14 @@ inputSearch.classList.add('search-input')
 inputSearch.setAttribute('placeholder', 'search')
 container.appendChild(inputSearch) 
 
+let buttonSortAscend = document.createElement('button')
+buttonSortAscend.classList.add('ascend-button')
+buttonSortAscend.innerText = 'Ascend'
+let buttonSortDecrease = document.createElement('button')
+buttonSortDecrease.classList.add('decrease-button')
+buttonSortDecrease.innerHTML='Decrease'
+container.append(buttonSortAscend,buttonSortDecrease)
+
 let ul = document.createElement('ul')
 ul.classList.add('list')
 container.appendChild(ul)
@@ -27,15 +35,14 @@ container.appendChild(div)
 let tasks = []
 let userId = '1'
 
-if (localStorage.getItem('tasks') !== null) {
-    tasks = JSON.parse(localStorage.getItem('tasks'))
-    // console.log(tasks)
-    renderingList() 
-}
+// if (localStorage.getItem('tasks') !== null) {
+//     tasks = JSON.parse(localStorage.getItem('tasks'))
+//     renderingList()
+// }
+// localStorage.clear()
 
 const taskAllLocalStorage = () => {
-    localStorage.setItem('tasks', JSON.stringify(tasks))
-    // console.log(localStorage)
+    // localStorage.setItem('tasks', JSON.stringify(tasks))
 }
 
 async function createHtmlItem() {
@@ -58,7 +65,7 @@ async function createHtmlItem() {
         infoText()
         clearnInput()
     }
-    taskAllLocalStorage()
+    // taskAllLocalStorage()
     
 }   
 
@@ -71,9 +78,11 @@ function renderingList() {
     tasks.forEach((item) => { 
         if (item.editetaple){
             let li = createLiEdite(item)
+            li.addEventListener('click', infoItemElement)
             ul.appendChild(li)
         } else {
             let li = createLi(item)
+            li.addEventListener('click', infoItemElement)
             ul.appendChild(li)
         }
     })
@@ -133,6 +142,8 @@ function createLiEdite(itemArr) {
     
     buttonSave.addEventListener('click', siveEditeble)
     buttonCancel.addEventListener('click', cancelEditeble)
+
+    
 
     
     return li
@@ -262,9 +273,32 @@ function filterText(e) {
         pNothing.innerHTML = "Not item found"
    }
 
-
 }
 
+buttonSortAscend.addEventListener('click', sortAscend)
+buttonSortDecrease.addEventListener('click', sortDecrease)
+
+function sortAscend() {
+ tasks = tasks.sort((a, b) => a.id > b.id ? 1 : -1)
+    console.log(tasks)
+    renderingList()
+}
+
+function sortDecrease() {
+    tasks = tasks.sort((a, b) => a.id < b.id ? 1 : -1)
+    console.log(tasks)
+    renderingList()
+    
+}
+
+function infoItemElement(e) {
+    let id = e.target.parentElement.id
+    console.log(id)
+    let itemLi = tasks.find(item => item.id.toString() === id)
+    console.log(itemLi)
+
+    getTask(itemLi.id)
+}
 
 function cookedTask(item) {
      return {
@@ -309,7 +343,7 @@ function ubdateTask(id,task) {
 
             // console.log(ubdateObg)
             renderingList()
-            taskAllLocalStorage()
+            // taskAllLocalStorage()
         })
         .catch(e =>console.log(e.message))
 }
@@ -351,4 +385,26 @@ function createTask(text) {
             divError.innerHTML = ""
             infoText(error.message)
         })
+}
+
+function getTask(id) {
+    
+    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+        method: 'GET',
+    })
+        .then(task => {
+            if (!task.ok) {
+                throw new Error(task.status)
+            } else {
+                return task
+            }
+        })
+        .then(response => {
+            // console.log(response.json())
+            return response.json()
+        })
+        .then(json => 
+              console.log(json)
+            )
+        .catch(e =>console.log(e.message))
 }
