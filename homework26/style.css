@@ -78,20 +78,19 @@ div.info{
   display: none;
 }
 div.active{
-    display: block;
+    display: flex;
+    align-items:center;
     position: absolute;
-    top:18%;
+    top:65px;
     height: 35px;
-    padding: 10px;
-    margin: 10px;
+    padding: 10px 0;
     color: red;
     font-size: 15px;
 }
-
-.search-input{
+.search-input {
   display: block;
 }
 
-.ascend-button{
+.ascend-button {
   margin-left: 0;
 }

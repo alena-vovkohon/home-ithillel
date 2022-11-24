@@ -30,43 +30,33 @@ container.appendChild(ul)
 
 let div = document.createElement('div') 
 div.classList.add('info')
-container.appendChild(div)      
+container.appendChild(div)    
+
+let pNothing = document.createElement('p')
+pNothing.classList.add('nothing') 
+container.appendChild(pNothing)
 
 let tasks = []
-let userId = '1'
 
-// if (localStorage.getItem('tasks') !== null) {
-//     tasks = JSON.parse(localStorage.getItem('tasks'))
-//     renderingList()
-// }
-// localStorage.clear()
+let userId = '5'
 
-const taskAllLocalStorage = () => {
-    // localStorage.setItem('tasks', JSON.stringify(tasks))
-}
+buttonAdd.addEventListener('click', createHtmlItem)
+inputSearch.addEventListener('input', filterText)
 
 async function createHtmlItem() {
     div.innerHTML = ''
     if (input.value)  
     if (validInput(input.value)) {
         let respons = await createTask(input.value)
-        console.log(respons)
-
         if (!respons) {
-            return
-        }
-
+                return
+            }
         tasks.push(cookedTask(respons))
-        renderingList() 
-        console.log(tasks)
-
-        clearnInput()
+        renderingList()
     } else {
-        infoText()
-        clearnInput()
+        infoText('use only standard alphanumerics')
     }
-    // taskAllLocalStorage()
-    
+    clearnInput()
 }   
 
 function validInput(value) {
@@ -78,14 +68,37 @@ function renderingList() {
     tasks.forEach((item) => { 
         if (item.editetaple){
             let li = createLiEdite(item)
-            li.addEventListener('click', infoItemElement)
+            // li.addEventListener('click', infoItemElement)
             ul.appendChild(li)
         } else {
             let li = createLi(item)
             li.addEventListener('click', infoItemElement)
             ul.appendChild(li)
         }
+    }) 
+ 
+}
+
+function filterText(e) {
+    pNothing.innerHTML = ""
+    ul.innerHTML = ''
+    let value = e.target.value
+    let resaltFilter = tasks.filter(item => item.text.toLowerCase().includes(value.toLowerCase()))
+
+    if (resaltFilter.length > 0) {
+       resaltFilter.forEach((item) => { 
+        if (item.editetaple){
+            let li = createLiEdite(item)
+            ul.appendChild(li)
+        } else {
+            let li = createLi(item)
+            ul.appendChild(li)
+        }
     })
+    } else {
+        pNothing.innerHTML = "Not item found"
+   }
+
 }
  
 function createLi(itemArr) {
@@ -133,58 +146,25 @@ function createLiEdite(itemArr) {
     li.appendChild(input)  
         
     let buttonSave = document.createElement('button')
-    buttonSave.classList.add('seve-button')
+    buttonSave.classList.add('save-button')
     buttonSave.innerText = 'Save'
     let buttonCancel = document.createElement('button')
     buttonCancel.classList.add('cansel-button')
     buttonCancel.innerHTML='Cancel'
     li.append(buttonSave, buttonCancel)
     
-    buttonSave.addEventListener('click', siveEditeble)
+    buttonSave.addEventListener('click', saveEditeble)
     buttonCancel.addEventListener('click', cancelEditeble)
+    input.addEventListener('click', infoItemElement)
 
-    
-
-    
     return li
-}
-
-buttonAdd.addEventListener('click', createHtmlItem)
- 
-async function siveEditeble(e) {
-    let id = e.target.parentElement.id
-    let itemLi = tasks.find(item => item.id.toString() === id)
-    itemLi.text = e.target.previousSibling.value
-
-    let result = await ubdateTask(itemLi.id, { ...itemLi, text: itemLi.text, chacked:false })
-    
-    // if (!result) {
-    //         return
-    // }
-    
-    // itemLi.editetaple = false
-    // itemLi.chacked = false
-
-    // renderingList()
-    // taskAllLocalStorage()
-    inputSearch.value = ''
 }
 
 async function remuveHandlerItem(e) {
     let id = e.target.parentElement.id
-    let index = tasks.findIndex(item => item.id.toString() === id)
-    // console.log(index)
+    let itemLi = tasks.find(item => item.id.toString() === id)
 
-    let result = await deleteToDoTask(tasks[index])
-    console.log(result)
-    // if (!result) {
-    //     return
-    // }
-
-    tasks.splice(index, 1)
-    console.log(tasks)
-    renderingList()
-    // taskAllLocalStorage()
+    await deleteToDoTask(itemLi.id)
 }
 
 function editeHandlerItem(e) {
@@ -196,7 +176,14 @@ function editeHandlerItem(e) {
     let oldChild = e.target.parentElement
 
     e.target.parentElement.parentElement.replaceChild(newChild, oldChild)
-    taskAllLocalStorage()
+}
+
+async function saveEditeble(e) {
+    let id = e.target.parentElement.id
+    let itemLi = tasks.find(item => item.id.toString() === id)
+  
+    await ubdateTask(itemLi.id, { ...itemLi, text: e.target.previousSibling.value, chacked:false, editetaple: false})
+    inputSearch.value = ''
 }
 
 function cancelEditeble(e) {
@@ -209,25 +196,17 @@ function cancelEditeble(e) {
 async function checkedTasks(e) {
     let id = e.target.parentElement.id
     let itemLi = tasks.find(item => item.id.toString() === id)
-    console.log(itemLi)
-    itemLi.chacked = e.target.checked
+    await ubdateTask(itemLi.id, { ...itemLi, chacked: e.target.checked})
 
-    let result = await ubdateTask(itemLi.id, { ...itemLi, chacked: itemLi.chacked })
-
-    // if (!result) {
-    //         return
-    //     }
-    
-    
-    // if (itemLi.chacked) {
-    //     e.target.nextSibling.classList.add('checked')
-    // } else {
-    //     e.target.nextSibling.classList.remove('checked')
-    // }
-    // taskAllLocalStorage()
+    if (itemLi.chacked) {
+        e.target.nextSibling.classList.add('checked')
+    } else {
+        e.target.nextSibling.classList.remove('checked')
+    }
 }
 
 function infoText(text) { 
+    div.innerHTML=""
     div.classList.add('active') 
     let p = document.createElement('p')
     div.appendChild(p)
@@ -243,61 +222,27 @@ buttonClearnAll.addEventListener('click', () => {
     div.innerHTML = ''
     ul.innerHTML = ''
     tasks = []
-    taskAllLocalStorage()
 })
-
-inputSearch.addEventListener('input', filterText)
-
- let pNothing = document.createElement('p')
-    pNothing.classList.add('nothing') 
-    container.appendChild(pNothing)
-
-function filterText(e) {
-    pNothing.innerHTML = ""
-     ul.innerHTML = ''
-    let value = e.target.value
-    let resaltFilter = tasks.filter(item => item.text.toLowerCase().includes(value.toLowerCase()))
-    console.log('resaltFilter', resaltFilter)
-
-    if (resaltFilter.length > 0) {
-       resaltFilter.forEach((item) => { 
-        if (item.editetaple){
-            let li = createLiEdite(item)
-            ul.appendChild(li)
-        } else {
-            let li = createLi(item)
-            ul.appendChild(li)
-        }
-    })
-    } else {
-        pNothing.innerHTML = "Not item found"
-   }
-
-}
 
 buttonSortAscend.addEventListener('click', sortAscend)
 buttonSortDecrease.addEventListener('click', sortDecrease)
 
 function sortAscend() {
- tasks = tasks.sort((a, b) => a.id > b.id ? 1 : -1)
-    console.log(tasks)
+    tasks = tasks.sort((a, b) => a.id > b.id ? 1 : -1)
     renderingList()
 }
 
 function sortDecrease() {
     tasks = tasks.sort((a, b) => a.id < b.id ? 1 : -1)
-    console.log(tasks)
     renderingList()
     
 }
 
 function infoItemElement(e) {
     let id = e.target.parentElement.id
-    console.log(id)
     let itemLi = tasks.find(item => item.id.toString() === id)
-    console.log(itemLi)
 
-    getTask(itemLi.id)
+    getTask(itemLi.id, { ...itemLi, editetaple: itemLi.editetaple} )
 }
 
 function cookedTask(item) {
@@ -309,10 +254,22 @@ function cookedTask(item) {
             }
 }
 
-function ubdateTask(id,task) {
-    // let ubdateItem = tasks.find(item => item.id === id)
-    // console.log(ubdateItem)
+function getInitalTask() {
+     div.innerHTML=""
+    fetch(`https://jsonplaceholder.typicode.com/users/${userId}/todos`)
+        .then(respons => respons.json())
+        .then(json => json.map(item =>cookedTask(item)))
+        .then(mappedTask => {
+            console.log(mappedTask)
+            tasks = mappedTask
+        })
+        .then(() => renderingList())
+        .catch(e =>alert(e.message))
+}
+getInitalTask()
 
+function ubdateTask(id, task) {
+     div.innerHTML=""
     fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -334,29 +291,45 @@ function ubdateTask(id,task) {
             }
         })
         .then(async task => {
-            console.log(task)
             let json = await task.json()
-            console.log(cookedTask(json))
+            cookedTask(json)
             let indexObg = tasks.findIndex(item => item.id === json.id)
-            console.log(indexObg)
             tasks[indexObg] = cookedTask(json)
-
-            // console.log(ubdateObg)
             renderingList()
-            // taskAllLocalStorage()
         })
-        .catch(e =>console.log(e.message))
+        .catch(error => {
+            console.log(error.message)
+            infoText(error.message)
+        })
+    
 }
 
 function deleteToDoTask(id) {
-    //  let ubdateItem = tasks.find(item => item.id === id)
-    // console.log(id)
+     div.innerHTML=""
     fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         method: 'DELETE',
     })
+      .then(task => {
+            if (!task.ok) {
+                throw new Error(task.status)
+            } else {
+                return task
+            }
+        })
+        .then(()=> {
+            let indexObg = tasks.findIndex(item => item.id === id)
+            tasks.splice(indexObg, 1)
+            renderingList()
+        })
+        .catch(error => {
+            console.log(error.message)
+            infoText(error.message)
+        })
+
 }
 
 function createTask(text) {
+     div.innerHTML=""
     return fetch(`https://jsonplaceholder.typicode.com/todos`, {
             method: 'POST',
             body: JSON.stringify({
@@ -369,29 +342,23 @@ function createTask(text) {
                 'Content-type': 'application/json; charset=UTF-8',
             },
     })
-        .then(task => {
+           .then(task => {
             if (!task.ok) {
                 throw new Error(task.status)
             } else {
                 return task
             }
         })
-        .then(response => {
-            console.log(response.json())
-            response.json()
-        })
+        .then(response => response.json())
         .catch(error => {
             console.log(error.message)
-            divError.innerHTML = ""
             infoText(error.message)
         })
 }
 
-function getTask(id) {
-    
-    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
-        method: 'GET',
-    })
+function getTask(id, task) {
+    div.innerHTML=""
+    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
         .then(task => {
             if (!task.ok) {
                 throw new Error(task.status)
@@ -399,12 +366,10 @@ function getTask(id) {
                 return task
             }
         })
-        .then(response => {
-            // console.log(response.json())
-            return response.json()
+        .then(response => response.json())
+        .then(json => {
+            let item = { ...json, editetaple: task.editetaple }
+            console.log(item)
         })
-        .then(json => 
-              console.log(json)
-            )
         .catch(e =>console.log(e.message))
 }
