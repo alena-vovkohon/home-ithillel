@@ -1,59 +1,55 @@
-
+import Tasks from "./Tasks.js"
 
 class ListItem {
-    constructor(item, tasks) {
-        // this.item = item
+    constructor(item) {
+        this.li = document.createElement('li')
+       
         this.text = item.text
         this.chacked = item.chacked
-        this.editetaple = item.editetaple
         this.id = item.id
+        this.editetaple =false
 
-        this.tasks = tasks
-
+        this.tasks = Tasks.getInstance()
     }
 
-    checkedTasks(e) {
-        console.log('checkedTasks')
-        console.log(this.chacked)
-        // let itemLi = this.tasks.findById(this.id)
-        // console.log('itemLi', itemLi)
-        
- 
+    checkedTasks() {
+        let itemLi = this.tasks.findById(this.id)
+        this.tasks.update(this.id, {...itemLi, chacked: !itemLi.chacked})
     }
 
     editeHandlerItem() {
-         console.log('editeHandlerItem')
-        // let itemLi = this.tasks.findById(this.id)
-        // this.tasks.update(this.id, {...itemLi, editetaple: true})
+        this.editetaple = true
+        this.render()
     }
 
     remuveHandlerItem() {
-        console.log('remuveHandlerItem')
         this.tasks.delete(this.id)
     }
 
-    siveEditeble(e) {
-     console.log('siveEditeble')
-    // let id = e.target.parentElement.id
-    // let itemLi = tasks.find(item => item.id.toString() === id)
-    // itemLi.text = e.target.previousSibling.value
-   
-    // itemLi.editetaple = false
-    // itemLi.chacked = false
-}
+    handleText(e) {
+        this.text = e.target.value
+    }
 
-    cancelEditeble(e) {
-        console.log('cancelEditeble')
-    // let id = e.target.parentElement.id
-    // let itemLi = tasks.find(item => item.id.toString() === id)
-    // itemLi.editetaple = false
-   
-}
+    siveEditeble() {
+        let itemLi = this.tasks.findById(this.id)
+        this.tasks.update(this.id, { ...itemLi, text: this.text, chacked: false }) 
+        this.editetaple = false
+    }
+
+    cancelEditeble() {
+        let itemLi = this.tasks.findById(this.id)
+        this.tasks.update(this.id, itemLi)
+        this.editetaple = false
+    }
+
+    infoItemElement(e) {
+        let id = e.target.parentElement.id
+        this.tasks.infoItem(id)
+    }
 
     renderReader() {
-        let li = document.createElement('li')
-        li.classList.add('list-item') 
-        li.setAttribute('id', this.id)
+        this.li.classList.add('list-item') 
+        this.li.setAttribute('id', this.id)
 
         let inputCheckbox = document.createElement('input')
         inputCheckbox.classList.add('list__checkbox')
@@ -61,8 +57,7 @@ class ListItem {
             
         let span = document.createElement('span')
         span.classList.add('list__span')
-        span.innerText = this.text
-        li.append(inputCheckbox, span)  
+        span.innerText = this.text 
             
         let buttonEdite = document.createElement('button')
         buttonEdite.classList.add('edite-button')
@@ -70,31 +65,27 @@ class ListItem {
         let buttonRemuve = document.createElement('button')
         buttonRemuve.classList.add('remuve-button')
         buttonRemuve.innerHTML='Remuve'
-        li.append(buttonEdite, buttonRemuve)
 
         if (this.chacked) {
         inputCheckbox.checked = true
         span.classList.add('checked')      
         }
 
-        buttonEdite.addEventListener('click', this.editeHandlerItem)
-        buttonRemuve.addEventListener('click', this.remuveHandlerItem)
-        inputCheckbox.addEventListener('click', this.checkedTasks)
+        buttonEdite.addEventListener('click', this.editeHandlerItem.bind(this))
+        buttonRemuve.addEventListener('click', this.remuveHandlerItem.bind(this))
+        inputCheckbox.addEventListener('click', this.checkedTasks.bind(this))
+        span.addEventListener('click', this.infoItemElement.bind(this))
 
-       
-
-        return li
+        return [inputCheckbox, span, buttonEdite, buttonRemuve]
     }
 
     renderEditetaple() {
-        let li = document.createElement('li')
-        li.classList.add('list-item') 
-        li.setAttribute('id', this.id)
+        this.li.classList.add('list-item') 
+        this.li.setAttribute('id', this.id)
             
         let input = document.createElement('input')
         input.classList.add('list__input')
-        input.value = this.text
-        li.appendChild(input)  
+        input.value = this.text 
             
         let buttonSave = document.createElement('button')
         buttonSave.classList.add('seve-button')
@@ -102,27 +93,24 @@ class ListItem {
         let buttonCancel = document.createElement('button')
         buttonCancel.classList.add('cansel-button')
         buttonCancel.innerHTML='Cancel'
-        li.append(buttonSave, buttonCancel)
         
-        buttonSave.addEventListener('click', this.siveEditeble)
-        buttonCancel.addEventListener('click', this.cancelEditeble)
-        // input.addEventListener('input', this.handleText)
+        buttonSave.addEventListener('click', this.siveEditeble.bind(this))
+        buttonCancel.addEventListener('click', this.cancelEditeble.bind(this))
+        input.addEventListener('input', this.handleText.bind(this))
+        input.addEventListener('click', this.infoItemElement.bind(this))
 
-    
-    return li
+         return [input, buttonSave, buttonCancel]
     }
 
     render() {
-        // console.log(this.item)
-         if (this.editetaple){
-            return this.renderEditetaple()
+        this.li.innerHTML = ''
+        if (this.editetaple) {
+            this.li.append(...this.renderEditetaple())
         } else {
-            return this.renderReader()
-        }
-      
-    }
-
-       
+            this.li.append(...this.renderReader())
+        } 
+        return this.li
+    }      
 }
 
 export default ListItem;

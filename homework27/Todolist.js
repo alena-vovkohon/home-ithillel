@@ -3,25 +3,33 @@ import List from './List.js'
 import Tasks from "./Tasks.js"
 
 class Todolist {
+
+    static instance ={}
+
+    static  getInstance(name) {
+        if (!Todolist.instance[name]) {
+            const instanceTodolist = new Todolist(name)
+            const tasks = Tasks.getInstance(instanceTodolist.render.bind(instanceTodolist))
+            
+            instanceTodolist.setTasks(tasks)
+            Todolist.instance[name] = instanceTodolist;
+        }
+        return Todolist.instance[name];
+  }
    
-    constructor(name, ) {
-        this.name = name
-        // this.tasks = tasks
-        this.tasks = new Tasks(this.render.bind(this))
-        console.log('todo cont', this.tasks)
-        
+    constructor(name) {
+        this.name = name  
     }
 
+    setTasks(tasks) {
+        this.tasks = tasks
+    }
 
     render() {
-        // console.log('Todolist', this.tasks)
         let container = document.querySelector(`#${this.name}`)
         container.innerHTML = ''
-        const controller = new Controller(this.tasks)
-        console.log(controller)
-
-        let list = new List(this.tasks)
-        console.log(list)
+        let controller = new Controller()
+        let list = new List()
         container.append(...controller.render(), list.render())
 
         return container

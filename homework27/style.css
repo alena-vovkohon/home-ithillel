@@ -87,9 +87,6 @@ div.active{
     color: red;
     font-size: 15px;
 }
-.search-input {
-  display: block;
-}
 
 .ascend-button {
   margin-left: 0;
