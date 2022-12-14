@@ -20,8 +20,6 @@ class Controller {
                     alert('use only standard alphanumerics')
                 }
         this.input.value = ''
-        console.log('Controller', this.tasks)
-        new Todolist('container').render()
     } 
 
     clearnAll() {
