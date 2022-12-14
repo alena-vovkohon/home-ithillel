@@ -1,0 +1,35 @@
+input {
+    position: relative;
+    width: 35%;
+    height: 35px;
+    margin: 10px 0;
+    border: solid 1px gray;
+    border-radius: 5px;
+}
+
+input:optional {
+    padding-left: 15px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+    border: solid 3px rgba(8, 84, 250, 0.2);
+}
+
+button {
+    margin: 10px;
+    height: 35px;
+    width: 100px;
+    border-radius: 5px;
+    color: gray;
+    border: solid 1px rgb(22, 22, 22);
+    background: white;
+    font-size: 15px;
+    text-align: center;
+}
+
+button:hover {
+    color: #ffffff;
+    background: rgba(8, 84, 250, 0.9);
+}
