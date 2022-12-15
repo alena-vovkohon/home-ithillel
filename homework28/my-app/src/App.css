@@ -1,0 +1,17 @@
+.App {
+  margin: 20px; 
+}
+
+.Section{
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+.Main{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 20px;
+}
