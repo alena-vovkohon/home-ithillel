@@ -1,0 +1,37 @@
+.App {
+  margin: 20px;
+  padding: 10px;
+}
+
+.Emoji {
+  width: 500px;
+  /* border: 1px solid #ccc; */
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+button {
+  margin: 10px;
+  height: 35px;
+  width: 150px;
+  border-radius: 5px;
+  color: gray;
+  border: solid 1px rgb(22, 22, 22);
+  background: white;
+  font-size: 15px;
+  text-align: center;
+}
+
+button:hover {
+  color: #ffffff;
+  background: rgba(8, 84, 250, 0.9);
+}
+
