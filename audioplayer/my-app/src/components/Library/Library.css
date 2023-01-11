@@ -33,3 +33,10 @@ h5.title{
 p.artist{
     font-size: 12px;
 }
+
+.color-backdrop.active{
+background-color: rgb(157, 174, 242);
+}
+.color-backdrop.itemSong {
+background-color:white;
+}

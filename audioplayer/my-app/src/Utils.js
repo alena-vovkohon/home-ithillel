@@ -1,5 +1,5 @@
 export const secondToMinutes = (duration) => {
-  console.log("duration", duration);
+  // console.log("duration", duration);
   if (!duration) {
     duration = 0;
   }

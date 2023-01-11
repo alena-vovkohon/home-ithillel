@@ -21,6 +21,9 @@ h5.titlePlayer{
     font-size: 20px;
     color: rgb(0, 0, 0, .6);
 }
+h5.titlePlayer.name {
+    margin: 10px 0;
+}
 .controler{
     margin-top: 50px;
     display: flex;
@@ -65,7 +68,7 @@ img.coverPlayer {
     object-fit: contain;
 }
 .artistPlayer{
-    margin: 30px;
+    margin: 10px;
     font-size: 16px;
     color: rgb(151, 149, 149, 0.6);
     text-align: center;

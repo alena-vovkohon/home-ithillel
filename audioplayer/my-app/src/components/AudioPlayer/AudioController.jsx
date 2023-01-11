@@ -5,7 +5,7 @@ import { ReactComponent as Next } from '../../images/next.svg';
 import { ReactComponent as Prev } from '../../images/prev.svg';
 import { secondToMinutes } from '../../Utils'
 
-const AudioController = ({isPlaying, onTogglePlay, currentTime, duration}) => {
+const AudioController = ({isPlaying, onTogglePlay, currentTime, duration,onPrevClick, onNextClick}) => {
     return (
         <div className="AudioController">
             <h5 className="titlePlayer">Player</h5>
@@ -30,7 +30,7 @@ const AudioController = ({isPlaying, onTogglePlay, currentTime, duration}) => {
                 type="button"
                 className="prev"
                 // aria-label="Previous"
-                // onClick={onPrevClick}
+                onClick={onPrevClick}
             >
                 <Prev/>
             </button>
@@ -48,7 +48,7 @@ const AudioController = ({isPlaying, onTogglePlay, currentTime, duration}) => {
                 type="button"
                 className="next"
                 // aria-label="Next"
-                // onClick={onNextClick}
+                onClick={onNextClick}
             >
                 <Next/>
             </button>   
