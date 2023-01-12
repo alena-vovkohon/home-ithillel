@@ -1,16 +1,26 @@
-import React, {useState, useRef,useEffect } from "react";
+import React, {useState, useRef,useEffect, useContext } from "react";
 import "./AudioPlayer.css";
 import useChillHop from "../../API/useChillHop";
 import AbortController from './AudioController'
+import { ListContext } from "../../context/ListContext";
 
 
-const AudioPlayer = ({ currentTrack,nextTrack,prevTrack }) => {
+const AudioPlayer = ({chillhop:trecks}) => {
+    const { current:currentTrack, nextTrack, prevTrack } = useContext(ListContext);
+
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
-    const chillhop = useChillHop()[currentTrack]
+    // const chillhop = useChillHop()[currentTrack]
+    const chillhop = trecks[currentTrack]
     const audioRef = useRef(new Audio(chillhop.audio));
-    // console.log('currentTime', currentTime)
-    // console.log('audioRef', ~~audioRef.current.duration)
+
+
+    // const isReady = useRef(false);
+
+    // console.log('trecks', trecks, chillhop)
+    // console.log('isReady', isReady, isReady.current)
+    console.log('isPlaying', isPlaying)
+
  
     const toggleHandler = () => {
             setIsPlaying(!isPlaying)
@@ -34,11 +44,6 @@ const AudioPlayer = ({ currentTrack,nextTrack,prevTrack }) => {
 
     useEffect(() => {
         isPlaying ? play() : pause()
-        // if (isPlaying) {
-        //     play()
-        // } else {
-        //    pause();
-        // }
     }, [isPlaying]);
 
     useEffect(() => {
@@ -51,6 +56,25 @@ const AudioPlayer = ({ currentTrack,nextTrack,prevTrack }) => {
         
     }, [currentTime])
 
+
+    useEffect(() => {
+        pause()
+        audioRef.current = new Audio(chillhop.audio);
+        
+        setCurrentTime(audioRef.current.currentTime);
+        setIsPlaying(false)
+        // if (isPlaying) {
+        //     // setIsPlaying(false)
+        //     play();
+        // } 
+  }, [currentTrack]);
+
+   const onScrub = (value) => {
+        // console.log(value)
+    clearInterval(intervalRef.current);
+    audioRef.current.currentTime = value;
+    setCurrentTime(audioRef.current.currentTime);
+  }
     
     return (
         <div className="AudioPlayer">
@@ -60,8 +84,9 @@ const AudioPlayer = ({ currentTrack,nextTrack,prevTrack }) => {
             <AbortController
                 isPlaing={isPlaying}
                 onTogglePlay={toggleHandler}
-                onPrevClick={prevTrack}
-                onNextClick={nextTrack}
+                onScrubInput = {onScrub}
+                // onPrevClick={prevTrack}
+                // onNextClick={nextTrack}
                 // currentTime = {audioRef.current.currentTime}
                 currentTime = {currentTime}
                 duration={audioRef.current.duration} />

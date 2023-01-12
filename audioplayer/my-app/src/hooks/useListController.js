@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 const useListController = (tracks = []) => {
   const [current, setCurrent] = useState(0);
-  console.log(current, tracks[current], tracks[current].id);
+  // console.log(current, tracks[current], tracks[current].id);
 
   const nextTrack = () => {
     console.log("nextTrack");

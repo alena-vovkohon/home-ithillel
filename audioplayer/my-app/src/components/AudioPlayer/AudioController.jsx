@@ -1,11 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./AudioPlayer.css";
 import { ReactComponent as Play } from '../../images/play.svg';
 import { ReactComponent as Next } from '../../images/next.svg'; 
 import { ReactComponent as Prev } from '../../images/prev.svg';
 import { secondToMinutes } from '../../Utils'
+import { ListContext } from "../../context/ListContext";
 
-const AudioController = ({isPlaying, onTogglePlay, currentTime, duration,onPrevClick, onNextClick}) => {
+const AudioController = ({isPlaying, onTogglePlay, currentTime, duration, onScrubInput}) => {
+    const { nextTrack, prevTrack } = useContext(ListContext);
+  
     return (
         <div className="AudioController">
             <h5 className="titlePlayer">Player</h5>
@@ -18,7 +21,8 @@ const AudioController = ({isPlaying, onTogglePlay, currentTime, duration,onPrevC
                             min='0'
                             max={duration ? duration : `${duration}`}
                             className="progress"
-                            // onChange={(e) => onScrub(e.target.value)}
+                            // onChange={(e) => console.log(e.target.value)}
+                            onChange = {(e) => onScrubInput(e.target.value)}
                             // onMouseUp={onScrubEnd}
                             // onKeyUp={onScrubEnd}
                         />
@@ -30,14 +34,16 @@ const AudioController = ({isPlaying, onTogglePlay, currentTime, duration,onPrevC
                 type="button"
                 className="prev"
                 // aria-label="Previous"
-                onClick={onPrevClick}
+                    // onClick={onPrevClick}
+                    onClick={prevTrack}
             >
                 <Prev/>
             </button>
              <button
                 type="button"
                 className="play"
-                onClick={onTogglePlay}
+                    onClick={onTogglePlay}
+                    
                 // aria-label="Pause"
             >
                 {/* {isPlaing} */}
@@ -48,7 +54,8 @@ const AudioController = ({isPlaying, onTogglePlay, currentTime, duration,onPrevC
                 type="button"
                 className="next"
                 // aria-label="Next"
-                onClick={onNextClick}
+                    // onClick={onNextClick}
+                    onClick={nextTrack}
             >
                 <Next/>
             </button>   
