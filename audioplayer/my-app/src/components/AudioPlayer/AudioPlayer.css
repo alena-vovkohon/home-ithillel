@@ -1,0 +1,74 @@
+.AudioPlayer {
+    margin: 20px 0;
+    width: 400px;
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+}
+h2,
+h5,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+h5.title {
+    font-size: 16px;
+}
+h5.titlePlayer{
+    margin: 30px 0;
+    text-align: center;
+    font-size: 20px;
+    color: rgb(0, 0, 0, .6);
+}
+h5.titlePlayer.name {
+    margin: 10px 0;
+}
+.controler{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.prev svg,
+.next svg,
+.togglePlay svg{
+    width: 25px;
+    height: 25px;
+}
+
+.togglePlay{
+    margin: 0 100px;
+}
+button{
+    background-color:white;
+    border:none
+}
+.player{
+    display: flex;
+    align-items: center;
+}
+input[type=range] {
+    margin: 0 10px;
+    height: 5px;
+    /* -webkit-appearance: none; */
+    width: 100%;
+    border-radius: 8px;
+    background: rgb(173, 172, 172);
+    transition: background 0.2s ease;
+    cursor: pointer;
+}
+
+img.coverPlayer {
+    margin: 0 auto;
+    width: 200px;
+    height: 200px;
+    border-radius:30%;
+    object-fit: contain;
+}
+.artistPlayer{
+    margin: 10px;
+    font-size: 16px;
+    color: rgb(151, 149, 149, 0.6);
+    text-align: center;
+}
