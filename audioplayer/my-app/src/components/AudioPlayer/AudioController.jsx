@@ -1,12 +1,13 @@
 import React, {useContext} from "react";
 import "./AudioPlayer.css";
 import { ReactComponent as Play } from '../../images/play.svg';
+import { ReactComponent as Pause } from '../../images/pause.svg';
 import { ReactComponent as Next } from '../../images/next.svg'; 
 import { ReactComponent as Prev } from '../../images/prev.svg';
 import { secondToMinutes } from '../../Utils'
 import { ListContext } from "../../context/ListContext";
 
-const AudioController = ({isPlaying, onTogglePlay, currentTime, duration, onScrubInput}) => {
+const AudioController = ({isPlaying, onTogglePlay, currentTime, duration, onScrubInput,onScrubEndInput}) => {
     const { nextTrack, prevTrack } = useContext(ListContext);
   
     return (
@@ -19,12 +20,10 @@ const AudioController = ({isPlaying, onTogglePlay, currentTime, duration, onScru
                             value={currentTime}
                             step="1"
                             min='0'
-                            max={duration ? duration : `${duration}`}
+                            max={duration ? duration : '0'}
                             className="progress"
-                            // onChange={(e) => console.log(e.target.value)}
                             onChange = {(e) => onScrubInput(e.target.value)}
-                            // onMouseUp={onScrubEnd}
-                            // onKeyUp={onScrubEnd}
+                            onMouseUp={onScrubEndInput}
                         />
                 <p className="duration">{ secondToMinutes(duration) }</p>
             </div>
@@ -33,29 +32,35 @@ const AudioController = ({isPlaying, onTogglePlay, currentTime, duration, onScru
               <button
                 type="button"
                 className="prev"
-                // aria-label="Previous"
-                    // onClick={onPrevClick}
-                    onClick={prevTrack}
+                aria-label="Prev"
+                 onClick={prevTrack}
             >
                 <Prev/>
-            </button>
-             <button
-                type="button"
-                className="play"
-                    onClick={onTogglePlay}
-                    
-                // aria-label="Pause"
-            >
-                {/* {isPlaing} */}
-                <Play/>
-            </button>
-
-             <button
+                </button>
+                {isPlaying ? (
+                    <button
+                        type="button"
+                        className="togglePlay"
+                        onClick={() => onTogglePlay(false)}
+                        aria-label="Pause"
+                    >
+                        <Pause />
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        className="togglePlay"
+                        onClick={() => onTogglePlay(true)}
+                        aria-label="Play"
+                    >
+                        <Play />
+                    </button>
+                )}
+            <button
                 type="button"
                 className="next"
-                // aria-label="Next"
-                    // onClick={onNextClick}
-                    onClick={nextTrack}
+                aria-label="Next"
+                onClick={nextTrack}
             >
                 <Next/>
             </button>   

@@ -8,24 +8,13 @@ import { ListContext } from "./context/ListContext";
 
 function App() {
   const chillhop = useChillHop();
-  // const { current, setTrackById, nextTrack, prevTrack, currentIndex } =
-  //   useListController(chillhop);
   const controller = useListController(chillhop);
-  // console.log("controller", controller);
 
   return (
     <ListContext.Provider value={controller}>
       <div className="App">
-        <Library
-          chillhop={chillhop}
-          // currentIndex={currentIndex}
-        />
-        <AudioPlayer
-          chillhop={chillhop}
-          // currentTrack={current}
-          // nextTrack={nextTrack}
-          // prevTrack={prevTrack}
-        />
+        <Library chillhop={chillhop} />
+        <AudioPlayer chillhop={chillhop} />
       </div>
     </ListContext.Provider>
   );

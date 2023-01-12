@@ -32,12 +32,12 @@ h5.titlePlayer.name {
 
 .prev svg,
 .next svg,
-.play svg{
+.togglePlay svg{
     width: 25px;
     height: 25px;
 }
 
-.play{
+.togglePlay{
     margin: 0 100px;
 }
 button{
@@ -47,12 +47,11 @@ button{
 .player{
     display: flex;
     align-items: center;
-    /* flex-wrap: wrap; */
 }
 input[type=range] {
     margin: 0 10px;
     height: 5px;
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
     width: 100%;
     border-radius: 8px;
     background: rgb(173, 172, 172);

@@ -1,10 +1,11 @@
 import React from "react";
 import "./Library.css";
 
-const TrackItem = ({name,img,artist, isActive}) => {
+const TrackItem = ({ name, img, artist, isActive, onClickList }) => {
     return (
         <li
-        className={`color-backdrop ${isActive ? "active" : "itemSong"}`}
+            className={`color-backdrop ${isActive ? "active" : "itemSong"}`}
+            onClick = {onClickList}
         >
             <img className="cover" src={img} />
             <div>
