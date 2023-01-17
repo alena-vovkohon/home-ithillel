@@ -1,0 +1,42 @@
+.Library{
+    width: 40%;
+    height: 100vh;
+}
+h2,h5,p{
+    margin: 0;
+    padding: 0;
+}
+.Title{
+    margin: 20px 0;
+}
+ul.ListLibrery{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;  
+}
+li{
+    margin: 10px 0;
+    display:flex;
+    flex-wrap: wrap; 
+    align-items: center;
+}
+img.cover{
+    margin-right: 10px;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+h5.title{
+    font-size: 16px;
+}
+
+p.artist{
+    font-size: 12px;
+}
+
+.color-backdrop.active{
+background-color: rgb(157, 174, 242);
+}
+.color-backdrop.itemSong {
+background-color:white;
+}
