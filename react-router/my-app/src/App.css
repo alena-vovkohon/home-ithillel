@@ -1,0 +1,11 @@
+.App {
+    margin: 20px;
+  
+}
+.usersList{
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
