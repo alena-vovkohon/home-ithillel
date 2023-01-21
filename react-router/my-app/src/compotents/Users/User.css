@@ -7,8 +7,6 @@
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14);
     border-radius: 5px;
     transition: border, box-shadow .3s;
-
-
 }
 .userItem{
     margin: 0 5px;
@@ -18,7 +16,7 @@ span{
     font-weight: bold;
 }
 
-button {
+.button {
     margin: 10px;
     height: 25px;
     width: 70px;
@@ -30,7 +28,7 @@ button {
     text-align: center;
 }
 
-button:hover {
+.button:hover {
     color: #ffffff;
     background: rgba(8, 84, 250, 0.9);
 }
