@@ -1,79 +1,58 @@
 import React, {useState, useEffect} from "react";
-import { Link, Route } from "react-router-dom";
-import { API_URL_USER } from "../../constants/Constants";
-import Photos from "../Photos/Photos";
+import { Link,useRouteMatch} from "react-router-dom";
+import { API_URL_ALBUM } from "../../constants/Constants";
 import "./Albums.css";
 
 const Albums = ({ index }) => {
-    //  const [error, setError] = useState(null);
-    // const [isLoaded, setIsLoaded] = useState(false);
     const [albums, setAlbums] = useState([]);
-    // const [albumId, setAlbumId] = useState(0);
-    const [isOpenPhoto, setIsOpenPhoto] = useState(false);
-    const[linkPoto, setLinkPoto] = useState(null)
-    // const { userId } = useContext(ListContext);
-    // console.log('albums1', albums)
-    // console.log(`${API_URL_USER}/${index}/albums`)
+    const [error, setError] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(false);
+    
+    const { url } = useRouteMatch()
+    
+    useEffect(() => {
+        const getData = async () => {
+            try{
+        const response = await fetch(`${API_URL_ALBUM}${url}`);
+        if (!response.ok) {
+            throw new Error(response.status);
+        }
+        const resalt = await response.json();
+        setAlbums(resalt);
+        setIsLoaded(true);
+        } catch (err) {
+            setError(err.message);
+            setIsLoaded(true);
+        }
+        };
+        getData();
+    }, []);
 
-  useEffect(() => {
-      const getData = async () => {
-      const response = await fetch(`${API_URL_USER}/${index}/albums`);
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      const resalt = await response.json();
-      setAlbums(resalt);
-    //   setIsLoaded(true);
-     
-    };
-    getData();
-  }, []);
-    
-    // console.log('albums2', albums)
-    
-    const onClickPhotos = (indexAlbum) => {
-        console.log('onClickPhotos', indexAlbum)
-        //   setAlbumId(indexAlbum);
-        setIsOpenPhoto(false)
-            if (isOpenPhoto) {
-            setIsOpenPhoto(false);
-            } else {
-            setIsOpenPhoto(true);
-            }
-        console.log('isOpenPhoto',isOpenPhoto)
-        
-    }
-    
-    
+    if (error) {
+        return <p>Error: {error.message}</p>;
+    } else {
         return (
-             <div className="Albums">
+            <div className="Albums">
                 <div className="Head">
                     <h1>Albums</h1>
                 </div>
-                    <ul className="albumsList">
-                        {albums.map((item) => {
-                            return (
-                                <li className="albums" key={JSON.stringify({ ...item })}>
-                                    <p><span>title:</span>{item.title}</p> 
-                                    <Link className="link"
-                                        to={`/users/${item.userId}/albums/${item.id}/photo`}
-                                        onClick={()=>onClickPhotos(item.id)}>
-                                        Photos
-                                    </Link>
-                                    {isOpenPhoto ?
-                                        (<Route path={`/users/${item.userId}/albums/${item.id}/photo`}>
-                                        <Photos index={item.id} />
-                                        </Route>) :
-                                        null}
-                                </li>
-                                
-                                 
-                                
-                            )
-                        })}
+                <ul className="albumsList">
+                    {albums.map((item) => {
+                        return (
+                            <li className="albums" key={JSON.stringify({ ...item })}>
+                                <p><span>title:</span>{item.title}</p>
+                                <Link
+                                    className="link"
+                                    to={`/users/${item.userId}/albums/${item.id}/photo`}>
+                                    Photos
+                                </Link>
+                            </li>
+                        )
+                    })}
                 </ul>
-        </div>
-      )   
+            </div>
+        )
+    }  
   
 }
 export default Albums;
