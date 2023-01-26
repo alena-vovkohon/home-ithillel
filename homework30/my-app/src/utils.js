@@ -1,5 +1,5 @@
 import Folder from "./Folder/Folder";
-import File from "./File/File";
+import File from "./User/File";
 import { FOLDER_TYPE } from "./Constants";
 
 export const renderCarentType = (data, expandedFolders) => {
