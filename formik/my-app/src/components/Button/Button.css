@@ -1,0 +1,19 @@
+.Button{
+margin: 10px 0;
+}
+button {
+    height: 35px;
+    width: 100px;
+    border-radius: 5px;
+    color: gray;
+    border: solid 1px gray;
+    background: white;
+    font-size: 15px;
+    text-align: center;
+}
+
+button:hover {
+    color: #ffffff;
+    background: rgba(8, 84, 250, 0.9);
+    border: solid 3px rgba(8, 84, 250, 0.2);
+}
