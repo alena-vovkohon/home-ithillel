@@ -1,0 +1,29 @@
+ul {
+    margin: 25px 0;
+    list-style-type: none;
+}
+
+li {
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.list__checkbox {
+    width: auto;
+    height: auto;
+    zoom: 1.1;
+    margin: 0;
+    margin-right: 10px;
+}
+
+span {
+    width: 35%;
+    margin: 10px 0;
+}
+
+span.checked {
+    text-decoration-line: line-through;
+    color: #d1d2da;
+}
