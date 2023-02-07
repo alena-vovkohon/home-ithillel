@@ -1,7 +1,7 @@
 import React from "react";
 import "../List/List.css";
 
-const ListItemEdite = ({ item, readValue,saveTask}) => {
+const ListItemEdit = ({ item, readValue,saveTask}) => {
     return (
         <li className="list-item">
             <input
@@ -19,4 +19,4 @@ const ListItemEdite = ({ item, readValue,saveTask}) => {
     )
 }
 
-export default ListItemEdite;
+export default ListItemEdit;

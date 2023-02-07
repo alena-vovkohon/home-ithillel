@@ -14,8 +14,8 @@ function App() {
         ...tasks,
         {
           text: value,
-          chacked: false,
-          editetaple: false,
+          checked: false,
+          editable: false,
           id: new Date(),
         },
       ]);
@@ -28,42 +28,42 @@ function App() {
     setTasks([]);
   };
 
-  const remuveTask = (index) => {
-    setTasks(tasks.filter((item) => item.id !== index));
+  const removeTask = (id) => {
+    setTasks(tasks.filter((item) => item.id !== id));
   };
 
-  const checkedTask = (index) => {
+  const checkedTask = (id) => {
     setTasks(
       tasks.map((item) => {
-        if (item.id !== index) {
+        if (item.id !== id) {
           return item;
         }
         return {
           ...item,
-          chacked: !item.chacked,
+          checked: !item.checked,
         };
       })
     );
   };
 
-  const editeTask = (index) => {
+  const editTask = (id) => {
     setTasks(
       tasks.map((item) => {
-        if (item.id !== index) {
+        if (item.id !== id) {
           return item;
         }
         return {
           ...item,
-          editetaple: true,
+          editable: true,
         };
       })
     );
   };
 
-  const readValueInput = (text, index) => {
+  const readValueInput = (text, id) => {
     setTasks(
       tasks.map((item) => {
-        if (item.id === index) {
+        if (item.id === id) {
           return {
             ...item,
             text: text,
@@ -74,16 +74,16 @@ function App() {
     );
   };
 
-  const saveTaskInput = (index) => {
+  const saveTaskInput = (id) => {
     setTasks(
       tasks.map((item) => {
-        if (item.id !== index) {
+        if (item.id !== id) {
           return item;
         }
         return {
           ...item,
-          chacked: false,
-          editetaple: false,
+          checked: false,
+          editable: false,
         };
       })
     );
@@ -100,9 +100,9 @@ function App() {
       {isOpen ? (
         <List
           tasks={tasks}
-          remuveTask={remuveTask}
+          removeTask={removeTask}
           checkedTask={checkedTask}
-          editeTask={editeTask}
+          editTask={editTask}
           readValue={readValueInput}
           saveTask={saveTaskInput}
         />

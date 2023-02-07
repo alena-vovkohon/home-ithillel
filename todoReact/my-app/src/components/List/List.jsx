@@ -1,17 +1,17 @@
 import React from "react";
 import "./List.css";
 import ListItem from "../ListItem/ListItem";
-import ListItemEdite from "../ListItem/ListItemEdite";
+import ListItemEdit from "../ListItem/ListItemEdit";
 
-const List = ({ tasks, remuveTask, checkedTask,editeTask,readValue, saveTask}) => {
+const List = ({ tasks, removeTask, checkedTask,editTask,readValue, saveTask}) => {
     return (
         <ul className="list">
             {tasks.map(item => {
-                if (item.editetaple) {
-                    return (<ListItemEdite
+                if (item.editable) {
+                    return (<ListItemEdit
                         key={item.id}
                         item={item}
-                        remuveTask={remuveTask}
+                        removeTask={removeTask}
                         readValue={readValue}
                         saveTask={saveTask}
                     />)
@@ -19,10 +19,9 @@ const List = ({ tasks, remuveTask, checkedTask,editeTask,readValue, saveTask}) =
                     return <ListItem
                         item={item}
                         key={item.id}
-                        remuveTask={remuveTask}
+                        removeTask={removeTask}
                         checkedTask={checkedTask}
-                        chacked={item.chacked}
-                        editeTask={editeTask}
+                        editTask={editTask}
                     />
                 }
             })}

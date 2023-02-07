@@ -9,44 +9,42 @@ const taskaSlice = createSlice({
     add(state, action) {
       state.tasks.push({
         text: action.payload.value,
-        chacked: false,
-        editetaple: false,
+        checked: false,
+        editable: false,
         id: new Date().toISOString(),
       });
     },
     clearn(state, action) {
       state.tasks = action.payload;
     },
-    remuve(state, action) {
-      state.tasks = state.tasks.filter(
-        (item) => item.id !== action.payload.index
-      );
+    remove(state, action) {
+      state.tasks = state.tasks.filter((item) => item.id !== action.payload.id);
     },
     checked(state, action) {
       state.tasks = state.tasks.map((item) => {
-        if (item.id !== action.payload.index) {
+        if (item.id !== action.payload.id) {
           return item;
         }
         return {
           ...item,
-          chacked: !item.chacked,
+          checked: !item.checked,
         };
       });
     },
-    edite(state, action) {
+    edit(state, action) {
       state.tasks = state.tasks.map((item) => {
-        if (item.id !== action.payload.index) {
+        if (item.id !== action.payload.id) {
           return item;
         }
         return {
           ...item,
-          editetaple: true,
+          editable: true,
         };
       });
     },
     readValue(state, action) {
       state.tasks = state.tasks.map((item) => {
-        if (item.id === action.payload.index) {
+        if (item.id === action.payload.id) {
           return {
             ...item,
             text: action.payload.valueEdite,
@@ -57,19 +55,19 @@ const taskaSlice = createSlice({
     },
     save(state, action) {
       state.tasks = state.tasks.map((item) => {
-        if (item.id !== action.payload.index) {
+        if (item.id !== action.payload.id) {
           return item;
         }
         return {
           ...item,
-          editetaple: false,
-          chacked: false,
+          editable: false,
+          checked: false,
         };
       });
     },
   },
 });
 
-export const { add, clearn, remuve, checked, edite, readValue, save } =
+export const { add, clearn, remove, checked, edit, readValue, save } =
   taskaSlice.actions;
 export default taskaSlice.reducer;
