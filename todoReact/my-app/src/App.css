@@ -1,0 +1,49 @@
+.App {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 25px;
+}
+.Create{
+    display: flex;
+    align-items:center
+}
+
+input {
+    /* position: relative; */
+    width: 300px;
+    height: 35px;
+    /* margin: 10px 0; */
+    border: solid 1px gray;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+input:optional {
+    padding-left: 15px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+    border: solid 3px rgba(8, 84, 250, 0.2);
+}
+
+button {
+    height: 35px;
+    width: 100px;
+    border-radius: 5px;
+    color: gray;
+    border: solid 1px gray;
+    background: white;
+    font-size: 15px;
+    text-align: center;
+}
+.clearn-button{
+    margin-left: 10px;
+}
+
+button:hover {
+    color: #ffffff;
+    background: rgba(8, 84, 250, 0.9);
+    border: solid 3px rgba(8, 84, 250, 0.2);
+}
