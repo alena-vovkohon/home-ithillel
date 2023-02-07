@@ -4,7 +4,7 @@ import './UserForm.css'
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 
-let registrationSchema = yup.object().shape({
+const registrationSchema = yup.object().shape({
     firstName: yup
     .string()
     .required()
